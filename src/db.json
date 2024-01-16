@@ -1,0 +1,44 @@
+{
+  "todos": [
+    {
+      "title": "Изучить запросы к серверу",
+      "completed": "true",
+      "id": "OMiaTD2"
+    },
+    {
+      "title": "сделать домашку",
+      "completed": "true",
+      "id": "dXnc23u"
+    },
+    {
+      "title": "я блин совсем запутался с пропсами )",
+      "completed": "true",
+      "id": "dXncveu"
+    },
+    {
+      "title": "научился делать пользовательские хуки",
+      "completed": "true",
+      "id": "OMiaTD_"
+    },
+    {
+      "title": "сделать упражнения планки",
+      "completed": "false",
+      "id": "0wvLPMz"
+    },
+    {
+      "title": "прогуляться, подышать воздухом",
+      "completed": "false",
+      "id": "YTt3v6Y"
+    },
+    {
+      "title": "тест",
+      "completed": "true",
+      "id": "6FGtCm5"
+    },
+    {
+      "title": "Новое дело",
+      "completed": "false",
+      "id": "ZyUsU5o"
+    }
+  ]
+}
