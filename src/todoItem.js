@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styles from './app.module.css';
-import { TodoProvider, useTodo } from './hooks/use-todo';
+import { useTodo } from './hooks/use-todo';
 
 export const TodoItem = (todo) => {
 	const [isEditItem, setIsEditItem] = useState(false);
@@ -19,66 +19,64 @@ export const TodoItem = (todo) => {
 	};
 
 	return (
-		<TodoProvider>
-			<>
-				{!isEditItem ? (
-					<div className={styles.todo}>
-						<div>
-							{todo.title} -{' '}
-							{todo.completed === 'true' ? 'выполнено' : 'не выполнено'}
-						</div>
-						<button
-							className={styles.button}
-							onClick={() => {
-								handleEditItem();
-							}}
-						>
-							Изменить дело
-						</button>
-						<button
-							className={styles.button}
-							disabled={isCompleted}
-							onClick={() => {
-								requestCompletedTodo(todo.id);
-							}}
-						>
-							Выполнить дело
-						</button>
-						<button
-							className={styles.button}
-							disabled={isDeleting}
-							onClick={() => requestDeleteTodo(todo.id)}
-						>
-							Удалить дело
-						</button>
+		<>
+			{!isEditItem ? (
+				<div className={styles.todo}>
+					<div>
+						{todo.title} -{' '}
+						{todo.completed === 'true' ? 'выполнено' : 'не выполнено'}
 					</div>
-				) : (
-					<div className={styles.todo}>
-						<input
-							value={newTitleTodo}
-							onChange={(e) => {
-								setNewTitleTodo(e.currentTarget.value);
-							}}
-						/>
-						<button
-							className={styles.button}
-							onClick={() => {
-								requestEditTodo(todo.id);
-							}}
-						>
-							Сохранить изменения
-						</button>
-						<button
-							className={styles.button}
-							onClick={() => {
-								handleEditItem();
-							}}
-						>
-							Отменить изменения
-						</button>
-					</div>
-				)}
-			</>
-		</TodoProvider>
+					<button
+						className={styles.button}
+						onClick={() => {
+							handleEditItem();
+						}}
+					>
+						Изменить дело
+					</button>
+					<button
+						className={styles.button}
+						disabled={isCompleted}
+						onClick={() => requestCompletedTodo(todo.id)}
+					>
+						Выполнить дело
+					</button>
+					<button
+						className={styles.button}
+						disabled={isDeleting}
+						onClick={() => requestDeleteTodo(todo.id)}
+					>
+						Удалить дело
+					</button>
+				</div>
+			) : (
+				<div className={styles.todo}>
+					<input
+						value={newTitleTodo}
+						onChange={(e) => {
+							setNewTitleTodo(e.currentTarget.value);
+						}}
+					/>
+					<button
+						className={styles.button}
+						onClick={() => {
+							requestEditTodo(todo.id, newTitleTodo);
+							handleEditItem();
+						}}
+					>
+						Сохранить изменения
+					</button>
+					<button
+						className={styles.button}
+						onClick={() => {
+							setNewTitleTodo(todo.title);
+							handleEditItem();
+						}}
+					>
+						Отменить изменения
+					</button>
+				</div>
+			)}
+		</>
 	);
 };

@@ -1,71 +1,60 @@
-import { useState } from 'react';
 import styles from './app.module.css';
+import { useState } from 'react';
 import { TodoItem } from './todoItem';
-import { useDebounce } from '@uidotdev/usehooks';
-import { TodoProvider, useTodo } from './hooks/use-todo';
+import { useTodo } from './hooks/use-todo';
 
 export const App = () => {
-	//const [refreshTodoFlag, setRefreshTodoFlag] = useState(false);
 	const [searchTodo, setSearchTodo] = useState('');
-	const debouncedSearchTodo = useDebounce(searchTodo, 1000);
-
 	const [sortTodoFlag, setSortTodoFlag] = useState(false);
 
-	//const refreshTodo = () => setRefreshTodoFlag(!refreshTodoFlag);
-
-	const { todos, setTodos, isLoading, isCreating, requestAddTodo } = useTodo(
-		//	refreshTodoFlag,
-		debouncedSearchTodo,
-		setSortTodoFlag,
-		//	refreshTodo,
-	);
-
-	console.log(todos);
+	const {
+		todos,
+		setTodos,
+		isLoading,
+		isCreating,
+		requestAddTodo
+	} = useTodo();
 
 	const handleSearch = (e) => {
 		setSearchTodo(e.target.value);
 	};
 
+	const filterTodos = todos.filter((todo) => todo.title.includes(searchTodo));
+
 	const sortTodo = () => {
-		const copyData = todos.slice();
+		const copyData = filterTodos.slice();
 		const sortData = copyData.sort((a, b) => a.title.localeCompare(b.title));
 		setTodos(sortData);
 		setSortTodoFlag(true);
 	};
 
+	const addTodo = () => {
+		setSortTodoFlag(false);
+		requestAddTodo();
+	};
+
 	return (
-		<TodoProvider>
-			<div className={styles.app}>
-				<div>Список дел</div>
-				{isLoading ? (
-					<div className={styles.loader}></div>
-				) : (
-					todos?.map((todo) => (
-						//						<TodoItem key={todo.id} {...todo} refreshTodo={refreshTodo} />
-						<TodoItem key={todo.id} {...todo} />
-					))
-				)}
-				<button
-					disabled={isCreating}
-					onClick={requestAddTodo}
-					className={styles.button}
-				>
-					Добавить дело
-				</button>
-				<input
-					value={searchTodo}
-					onChange={handleSearch}
-					placeholder="Поиск дела"
-				/>
-				<button
-					onClick={sortTodo}
-					className={`${styles.button} ${
-						sortTodoFlag ? styles.buttonPressed : ''
-					}`}
-				>
-					Сортировка дел по алфавиту
-				</button>
-			</div>
-		</TodoProvider>
+		<div className={styles.app}>
+			<div>Список дел</div>
+			{isLoading ? (
+				<div className={styles.loader}></div>
+			) : (
+				filterTodos.map((todo) => <TodoItem key={todo.id} {...todo} />)
+			)}
+			<button
+				disabled={isCreating}
+				onClick={addTodo}
+				className={styles.button}
+			>
+				Добавить дело
+			</button>
+			<input value={searchTodo} onChange={handleSearch} placeholder="Поиск дела" />
+			<button
+				onClick={sortTodo}
+				className={`${styles.button} ${sortTodoFlag ? styles.buttonPressed : ''}`}
+			>
+				Сортировка дел по алфавиту
+			</button>
+		</div>
 	);
 };

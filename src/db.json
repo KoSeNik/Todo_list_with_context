@@ -1,11 +1,6 @@
 {
   "todos": [
     {
-      "title": "Изучить запросы к серверу",
-      "completed": "true",
-      "id": "OMiaTD2"
-    },
-    {
       "title": "сделать домашку",
       "completed": "true",
       "id": "dXnc23u"
@@ -27,18 +22,8 @@
     },
     {
       "title": "прогуляться, подышать воздухом",
-      "completed": "false",
-      "id": "YTt3v6Y"
-    },
-    {
-      "title": "тест",
       "completed": "true",
-      "id": "6FGtCm5"
-    },
-    {
-      "title": "Новое дело",
-      "completed": "false",
-      "id": "ZyUsU5o"
+      "id": "YTt3v6Y"
     }
   ]
 }

@@ -21,7 +21,6 @@ export const TodoProvider = ({ children }) => {
 			.then((loadedData) => loadedData.json())
 			.then((loadedTodos) => {
 				setTodos(loadedTodos);
-				console.log(loadedTodos);
 			})
 			.finally(() => {
 				setIsLoading(false);
@@ -30,7 +29,6 @@ export const TodoProvider = ({ children }) => {
 
 	const requestEditTodo = (id, newTitleTodo) => {
 		setIsEditing(true);
-
 		fetch(`http://localhost:3005/todos/${id}`, {
 			method: 'PATCH',
 			headers: { 'Content-Type': 'application/json;charset=utf-8' },
@@ -41,7 +39,10 @@ export const TodoProvider = ({ children }) => {
 			.then((rawResponse) => rawResponse.json())
 			.then((response) => {
 				console.log('Дело изменено, ответ сервера:', response);
-				//refreshTodo();
+				const updateTodos = todos.slice();
+				const indexTodo = todos.findIndex((todo) => todo.id === id);
+				updateTodos[indexTodo] = response;
+				setTodos(updateTodos);
 			})
 			.finally(() => {
 				setIsEditing(false);
@@ -60,7 +61,7 @@ export const TodoProvider = ({ children }) => {
 			.then((rawResponse) => rawResponse.json())
 			.then((response) => {
 				console.log('Дело удалено, ответ сервера:', response);
-				//refreshTodo();
+				setTodos(todos.filter((todo) => todo.id !== id));
 			})
 			.finally(() => setIsDeleting(false));
 		return {
@@ -82,9 +83,11 @@ export const TodoProvider = ({ children }) => {
 			.then((rawResponse) => rawResponse.json())
 			.then((response) => {
 				console.log('Добавлено новое дело, ответ сервера:', response);
-				//			refreshTodo();
+				setTodos([...todos, response]);
 			})
-			.finally(() => setIsCreating(false));
+			.finally(() => {
+				setIsCreating(false);
+			});
 		return {
 			isCreating,
 			requestAddTodo,
@@ -103,7 +106,10 @@ export const TodoProvider = ({ children }) => {
 			.then((rawResponse) => rawResponse.json())
 			.then((response) => {
 				console.log('Дело сделано, ответ сервера:', response);
-				//		refreshTodo();
+				const updateTodos = todos.slice();
+				const indexTodo = todos.findIndex((todo) => todo.id === id);
+				updateTodos[indexTodo] = response;
+				setTodos(updateTodos);
 			})
 			.finally(() => setIsCompleted(false));
 		return {
@@ -113,7 +119,6 @@ export const TodoProvider = ({ children }) => {
 	};
 
 	useEffect(() => {
-		//setIsLoading(true);
 		requestGetTodo();
 	}, []);
 
@@ -121,6 +126,7 @@ export const TodoProvider = ({ children }) => {
 		<TodoContext.Provider
 			value={{
 				todos,
+				setTodos,
 				requestGetTodo,
 				requestEditTodo,
 				requestDeleteTodo,
